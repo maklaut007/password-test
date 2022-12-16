@@ -27,7 +27,6 @@ export class PasswordInputComponent implements OnInit {
     if (pass.length < 8) {
       return;
     }
-
     this.hasNumber(pass) ? symbolDiff++ : null;
     this.hasLetter(pass) ? symbolDiff++ : null;
     this.hasSymbol(pass) ? symbolDiff++ : null;
