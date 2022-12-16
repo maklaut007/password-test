@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { PasswordDifficultyService } from '../services/password-difficulty.service';
 
 @Component({
   selector: 'app-password-input',
@@ -7,24 +8,27 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./password-input.component.scss'],
 })
 export class PasswordInputComponent implements OnInit {
-  passwordDifficulty: number = 0;
   passwordControl = new FormControl('');
-  constructor() {}
+  constructor(public service: PasswordDifficultyService) {}
 
   checkPasswordDifficulty = (pass: string) => {
     if (pass.length === 0) {
-      this.passwordDifficulty = 0;
+      this.service.setDifficulty(0);
       return;
     }
 
-    this.passwordDifficulty = 1;
+    this.service.setDifficulty(1);
+    let symbolDiff: number = 1;
+
     if (pass.length < 8) {
       return;
     }
 
-    this.hasNumber(pass) ? this.passwordDifficulty++ : null;
-    this.hasLetter(pass) ? this.passwordDifficulty++ : null;
-    this.hasSymbol(pass) ? this.passwordDifficulty++ : null;
+    this.hasNumber(pass) ? symbolDiff++ : null;
+    this.hasLetter(pass) ? symbolDiff++ : null;
+    this.hasSymbol(pass) ? symbolDiff++ : null;
+
+    this.service.setDifficulty(symbolDiff);
   };
 
   hasNumber = (str: string) => {
