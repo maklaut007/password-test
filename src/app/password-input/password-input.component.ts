@@ -9,15 +9,19 @@ import { PasswordDifficultyService } from '../services/password-difficulty.servi
 })
 export class PasswordInputComponent implements OnInit {
   passwordControl = new FormControl('');
-  constructor(public service: PasswordDifficultyService) {}
+  passwordDifficulty!: number;
+
+  constructor(public passDiff: PasswordDifficultyService) {
+    passDiff.get().subscribe((val) => (this.passwordDifficulty = val));
+  }
 
   checkPasswordDifficulty = (pass: string) => {
     if (pass.length === 0) {
-      this.service.setDifficulty(0);
+      this.passDiff.set(0);
       return;
     }
 
-    this.service.setDifficulty(1);
+    this.passDiff.set(1);
     let symbolDiff: number = 1;
 
     if (pass.length < 8) {
@@ -28,7 +32,7 @@ export class PasswordInputComponent implements OnInit {
     this.hasLetter(pass) ? symbolDiff++ : null;
     this.hasSymbol(pass) ? symbolDiff++ : null;
 
-    this.service.setDifficulty(symbolDiff);
+    this.passDiff.set(symbolDiff);
   };
 
   hasNumber = (str: string) => {

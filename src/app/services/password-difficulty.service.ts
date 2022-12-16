@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PasswordDifficultyService {
-  difficulty: number = 0;
+  difficulty: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  getDifficulty() {
+  get(): BehaviorSubject<number> {
     return this.difficulty;
   }
-  setDifficulty(diff: number) {
-    this.difficulty = diff;
+  set(diff: number) {
+    this.difficulty.next(diff);
   }
   constructor() {}
 }
